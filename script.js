@@ -15,8 +15,9 @@
         // if the board is full announce that the game is tied and ask the user to choose mode
     // switch player
 
-
-let game = function() {
+let play = function() {
+    let info = document.querySelector('#game-information');
+    info.textContent = 'The Game is Running';
 
     let gameContinue = true;
     let player = 'X';
@@ -26,21 +27,49 @@ let game = function() {
         ['_', '_', '_']
     ];
 
-    function drawBoard() {
-        let boardString = ''
-        for(let row = 0; row < 3; row++) {
-            for(let col = 0; col < 3; col++) {
-                boardString += ` ${board[row][col]} `
+    function renderBoard() {
+        const boardView = document.createElement('div');
+        boardView.classList.add('board');
+        for(let row = 0; row < board.length ; row++) {
+            const cellRow = document.createElement('div');
+            cellRow.classList.add('cell-row');
+            for(let col = 0; col < board[row].length; col++) {
+                const cell = document.createElement('button');
+                cell.classList.add('cell');
+                cell.textContent = board[row][col];
+                if (cell.textContent !== "_" || !gameContinue) {cell.disabled = true;}
+                cell.addEventListener('click', clickCell(row, col));
+                cellRow.appendChild(cell);
             }
-            boardString += '\n'
+            boardView.appendChild(cellRow);
         }
-        console.log(boardString);
+
+        const container = document.querySelector('.board-container');
+
+        if(container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
+        container.appendChild(boardView);
     }
 
-    function askUserChoice(player) {
-        const row = prompt('enter row');
-        const column = prompt('enter column');
-        board[row][column] = player;
+    function clickCell(row, col) {
+        return (event) => {
+            board[row][col] = player;
+
+            if(isWinning(player)) {
+                console.log(`We have a winner. And the winner is ${player}.`);
+                info.textContent = `We have a winner. And the winner is ${player}.`;
+                gameContinue = false;
+            } else if(checkFullBoard()) {
+                console.log("It's a tie.")
+                info.textContent = "It's a tie.";
+                gameContinue = false;
+            } else {
+                player = (player==='X') ? 'O' : 'X';
+            }
+            renderBoard();
+        }
     }
 
     function isWinning(player) {
@@ -85,21 +114,10 @@ let game = function() {
         return true;
     }
 
-    drawBoard();
-    while(gameContinue) {
-        askUserChoice(player);
-        drawBoard();
-        if(isWinning(player)) {
-            console.log(`We have a winner. And the winner is ${player}.`)
-            gameContinue = false;
-        } else if(checkFullBoard()) {
-            console.log("It's a tie.")
-            gameContinue = false;
-            player = '_';
-        } else {
-            player = (player==='X') ? 'O' : 'X';
-        }
-    }
+    renderBoard();
 
-    return(player);
-}
+};
+
+const resetButton = document.querySelector('#reset-game');
+resetButton.addEventListener('click', play);
+play();

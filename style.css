@@ -1,3 +1,34 @@
 body {
-    color: orange;
+    color: black;
+}
+
+.board {
+    padding: 4rem 4rem;
+    
+    display: grid;
+    grid-template-rows: repeat(3, 3rem);
+    gap: 2rem;
+
+    background-color: gray;;
+}
+
+.cell-row {
+    display: grid;
+    grid-template-columns: repeat(3, 3rem);
+    gap: 2rem;
+}
+
+.cell {
+    width: 3rem;
+    height: 3rem;
+
+    background-color: orange;
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+    border: none;
+}
+
+.cell:disabled {
+    color: black;
 }
