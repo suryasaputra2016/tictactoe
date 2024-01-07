@@ -22,9 +22,9 @@ let play = function() {
     let gameContinue = true;
     let player = 'X';
     let board = [
-        ['_', '_', '_'],
-        ['_', '_', '_'],
-        ['_', '_', '_']
+        [' ', ' ', ' '],
+        [' ', ' ', ' '],
+        [' ', ' ', ' ']
     ];
 
     function renderBoard() {
@@ -37,7 +37,7 @@ let play = function() {
                 const cell = document.createElement('button');
                 cell.classList.add('cell');
                 cell.textContent = board[row][col];
-                if (cell.textContent !== "_" || !gameContinue) {cell.disabled = true;}
+                if (cell.textContent !== " " || !gameContinue) {cell.disabled = true;}
                 cell.addEventListener('click', clickCell(row, col));
                 cellRow.appendChild(cell);
             }
@@ -58,11 +58,9 @@ let play = function() {
             board[row][col] = player;
 
             if(isWinning(player)) {
-                console.log(`We have a winner. And the winner is ${player}.`);
                 info.textContent = `We have a winner. And the winner is ${player}.`;
                 gameContinue = false;
             } else if(checkFullBoard()) {
-                console.log("It's a tie.")
                 info.textContent = "It's a tie.";
                 gameContinue = false;
             } else {
@@ -109,7 +107,7 @@ let play = function() {
 
     function checkFullBoard() {
         for(let row = 0; row < 3; row++) {
-            if(board[row].includes('_')) { return false; }
+            if(board[row].includes(' ')) { return false; }
         }
         return true;
     }
